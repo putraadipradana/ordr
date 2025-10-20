@@ -102,7 +102,7 @@ export default function CreateOrderForm() {
         <DrawerHeader className="gap-1">
           <DrawerTitle>Create order</DrawerTitle>
           <DrawerDescription>
-            Showing total visitors for the last 6 months
+            Place Your Order
           </DrawerDescription>
         </DrawerHeader>
         <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
