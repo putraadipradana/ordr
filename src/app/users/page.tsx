@@ -3,8 +3,8 @@ import { BreadcrumbItem } from "@/types/index";
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: "Orders",
-    href: "/orders",
+    title: "Users",
+    href: "/users",
   },
 ];
 export default function Page() {
