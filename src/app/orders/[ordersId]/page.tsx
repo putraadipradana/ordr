@@ -1,10 +1,10 @@
 import AppLayout from "@/components/app-layout";
-import { getOrderById } from "@/server/order";
+// import { getOrderById } from "@/server/order";
 import { BreadcrumbItem } from "@/types";
 
-type Params = Promise<{
-  orderId: string;
-}>;
+// type Params = Promise<{
+//   orderId: string;
+// }>;
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -17,16 +17,14 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 
-export default async function OrderPage({ params }: { params: Params }) {
-  const { orderId } = await params;
-
-  const { order } = await getOrderById(orderId);
+export default async function OrderPage() {
+  // const { order } = await getOrderById(orderId);
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <div>
         test
-        <h1>{order?.name}</h1>
+        {/* <h1>{order?.name}</h1> */}
       </div>
     </AppLayout>
   );
