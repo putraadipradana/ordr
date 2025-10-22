@@ -30,7 +30,7 @@ export const signUpUser = async (email: string, password: string, name: string) 
             },
         })
 
-        return { success: true, message: "Signed up successfully" }
+        return { success: true, message: "Please contact your admin for verification before login" }
     } catch (error) {
         const e = error as Error
         return { success: true, message: e.message || "Failed to sign up" }

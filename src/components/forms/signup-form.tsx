@@ -67,7 +67,7 @@ export function SignupForm({
       );
       if (response.success) {
         toast.success(response.message);
-        router.push("/dashboard");
+        router.push("/login");
       } else {
         toast.error(response.message);
       }

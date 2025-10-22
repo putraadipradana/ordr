@@ -20,12 +20,11 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default async function OrderPage({ params }: { params: Params }) {
   const { orderId } = await params;
   const { order } = await getOrderById(orderId);
+  console.log(order);
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
-      <div>
-        <h1>{order?.name}</h1>
-      </div>
+      <div></div>
     </AppLayout>
   );
 }
