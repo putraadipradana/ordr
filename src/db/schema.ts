@@ -78,6 +78,7 @@ export const order = pgTable("order", {
         .notNull(),
 })
 
+export type Order = typeof order.$inferSelect
 export type InsertOrder = typeof order.$inferInsert
 
 export const schema = { user, session, account, verification, order }

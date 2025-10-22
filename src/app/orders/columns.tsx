@@ -27,12 +27,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Checkbox } from "@/components/ui/checkbox";
 import z from "zod";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { deleteOrder } from "@/server/order";
+import { DataTableColumnHeader } from "@/components/data-table-column-header";
+import Link from "next/link";
 
 export const schema = z.object({
   id: z.string(),
@@ -45,6 +48,28 @@ export const schema = z.object({
 
 export const columns: ColumnDef<z.infer<typeof schema>>[] = [
   {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
     accessorKey: "orderNumber",
     header: "Order Number",
     cell: ({ row }) => (
@@ -53,11 +78,15 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
   },
   {
     accessorKey: "name",
-    header: "Name",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Name" />
+    ),
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Status" />
+    ),
     cell: ({ row }) => (
       <Badge variant="outline" className="py-1 [&>svg]:size-3.5">
         {row.original.status === "Done" ? (
@@ -73,7 +102,9 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
   },
   {
     accessorKey: "priority",
-    header: "Priority",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Status" />
+    ),
     cell: ({ row }) => (
       <Badge variant="outline" className="py-1 [&>svg]:size-3.5">
         {row.original.priority === "High" ? (
@@ -104,6 +135,10 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
     },
   },
   {
+    accessorKey: "submitedBy",
+    header: "Submited by",
+  },
+  {
     id: "actions",
     cell: ({ row }) => {
       return <TableAction item={row.original} />;
@@ -113,7 +148,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
 
 function TableAction({ item }: { item: z.infer<typeof schema> }) {
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
+  const [deleteDialog, setDeleteDialog] = useState(false);
 
   const handleDelete = async () => {
     try {
@@ -122,22 +157,32 @@ function TableAction({ item }: { item: z.infer<typeof schema> }) {
       if (response.success) {
         toast.success("Order deleted successfully");
         router.refresh();
-        setIsOpen(false);
+        setDeleteDialog(false);
       }
     } catch {
       toast.error("Failed to delete order");
     }
   };
 
+  const copyOrderNumber = async () => {
+    try {
+      navigator.clipboard.writeText(item.orderNumber);
+    } catch {
+      toast.error("Failed to copy order number");
+    } finally {
+      toast.success("Copied");
+    }
+  };
+
   return (
     <>
-      <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+      <AlertDialog open={deleteDialog} onOpenChange={setDeleteDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
+              order from our servers.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -157,16 +202,16 @@ function TableAction({ item }: { item: z.infer<typeof schema> }) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            onClick={() => navigator.clipboard.writeText(item.orderNumber)}
-          >
+          <DropdownMenuItem onSelect={copyOrderNumber}>
             Copy order number
           </DropdownMenuItem>
-          <DropdownMenuItem>View item</DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link href={`/orders/${item.id}`}>Insert item</Link>
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             variant="destructive"
-            onClick={() => setIsOpen(true)}
+            onSelect={() => setDeleteDialog(true)}
           >
             Delete
           </DropdownMenuItem>

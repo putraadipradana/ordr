@@ -18,6 +18,7 @@ import {
   IconInnerShadowTop,
   IconListDetails,
   IconUsers,
+  IconUsersGroup,
 } from "@tabler/icons-react";
 
 const data = {
@@ -38,9 +39,14 @@ const data = {
       icon: IconListDetails,
     },
     {
+      title: "Customers",
+      url: "/customers",
+      icon: IconUsers,
+    },
+    {
       title: "Users",
       url: "/users",
-      icon: IconUsers,
+      icon: IconUsersGroup,
     },
   ],
 };

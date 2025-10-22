@@ -1,24 +1,20 @@
 import AppLayout from "@/components/app-layout";
-import { getCustomers } from "@/server/customer";
-import { BreadcrumbItem } from "@/types/index";
+import { BreadcrumbItem } from "@/types";
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
-    title: "Users",
-    href: "/users",
+    title: "Customers",
+    href: "/customers",
   },
 ];
-export default async function Page() {
-  const team = await getCustomers();
-  console.log(team);
+
+export default function Page() {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <div className="flex flex-1 flex-col">
         <div className="@container/main flex flex-1 flex-col gap-2">
           <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-            <div className="px-4 lg:px-6">
-              <div>This is users page</div>
-            </div>
+            <div className="px-4 lg:px-6">This is customers page</div>
           </div>
         </div>
       </div>

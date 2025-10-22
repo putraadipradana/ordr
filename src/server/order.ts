@@ -29,6 +29,33 @@ export const getOrders = async () => {
     return orders
 }
 
+export const getNotebookById = async (id: string) => {
+    try {
+        const notebook = await db.query.order.findFirst({
+            where: eq(order.id, id),
+        });
+
+        return { success: true, notebook };
+    } catch {
+        return { success: false, message: "Failed to get notebook" };
+    }
+};
+
+export const getOrderById = async (id: string) => {
+    try {
+        const orderFisrt = await db.query.order.findFirst({
+            where: eq(order.id, id),
+            columns: {
+                id: true,
+                name: true
+            }
+        })
+        return { success: true, orderFisrt }
+    } catch {
+        return { success: false, message: "Failed to get order" }
+    }
+}
+
 export const deleteOrder = async (id: string) => {
     await db.delete(order).where(eq(order.id, id))
 
