@@ -33,9 +33,10 @@ import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { deleteOrder } from "@/server/order";
+import { deleteOrder } from "@/server/orders";
 import { DataTableColumnHeader } from "@/components/data-table-column-header";
 import Link from "next/link";
+import { format } from "date-fns";
 
 export const schema = z.object({
   id: z.string(),
@@ -44,6 +45,9 @@ export const schema = z.object({
   priority: z.enum(["Low", "Medium", "High"]),
   amount: z.string(),
   createdAt: z.date(),
+  user: z.object({
+    name: z.string(),
+  }),
 });
 
 export const columns: ColumnDef<z.infer<typeof schema>>[] = [
@@ -135,8 +139,20 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
     },
   },
   {
-    accessorKey: "submitedBy",
+    accessorKey: "createdAt",
+    header: "Date",
+    cell: ({ row }) => {
+      const date = row.original.createdAt;
+      return <span>{format(new Date(date), "dd MMMM, yyyy")}</span>;
+    },
+  },
+  {
+    accessorKey: "submited by",
     header: "Submited by",
+    cell: ({ row }) => {
+      const user = row.original.user;
+      return <span>{user.name}</span>;
+    },
   },
   {
     id: "actions",

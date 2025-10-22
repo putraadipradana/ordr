@@ -2,7 +2,7 @@ import AppLayout from "@/components/app-layout";
 import { BreadcrumbItem } from "@/types/index";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
-import { getOrders } from "@/server/order";
+import { getOrders } from "@/server/orders";
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -15,6 +15,7 @@ export const dynamic = "force-dynamic";
 
 export default async function Page() {
   const orders = await getOrders();
+  console.log(orders);
 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
@@ -22,7 +23,7 @@ export default async function Page() {
         <div className="@container/main flex flex-1 flex-col gap-2">
           <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
             <div className="px-4 lg:px-6">
-              <DataTable columns={columns} data={orders} />
+              {orders && <DataTable columns={columns} data={orders} />}
             </div>
           </div>
         </div>

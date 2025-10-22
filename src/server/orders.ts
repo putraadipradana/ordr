@@ -1,12 +1,12 @@
 "use server"
 
 import { db } from "@/db/drizzle";
-import { InsertOrder, order } from "@/db/schema";
+import { InsertOrder, orders } from "@/db/schema";
 import { eq } from "drizzle-orm"
 
 export const createOrder = async (values: InsertOrder) => {
     try {
-        await db.insert(order).values(values)
+        await db.insert(orders).values(values)
         return { success: true, message: "Order created successfully" };
     } catch {
         return { success: false, message: "Failed to create order" };
@@ -14,50 +14,54 @@ export const createOrder = async (values: InsertOrder) => {
 }
 
 export const getOrders = async () => {
-    const orders = await db.query.order.findMany({
+    const orders = await db.query.orders.findMany({
         columns: {
             id: true,
             orderNumber: true,
             name: true,
-            amount: true,
             status: true,
             priority: true,
+            amount: true,
             createdAt: true
         },
+        with: {
+            user: {
+                columns: {
+                    name: true
+                }
+            }
+        }
     })
 
-    return orders
+    return orders;
 }
-
-export const getNotebookById = async (id: string) => {
-    try {
-        const notebook = await db.query.order.findFirst({
-            where: eq(order.id, id),
-        });
-
-        return { success: true, notebook };
-    } catch {
-        return { success: false, message: "Failed to get notebook" };
-    }
-};
 
 export const getOrderById = async (id: string) => {
     try {
-        const orderFisrt = await db.query.order.findFirst({
-            where: eq(order.id, id),
+        const order = await db.query.orders.findFirst({
+            where: eq(orders.id, id),
             columns: {
                 id: true,
                 name: true
             }
         })
-        return { success: true, orderFisrt }
+        return { success: true, order }
     } catch {
         return { success: false, message: "Failed to get order" }
     }
 }
 
+export const updateNotebook = async (id: string, values: InsertOrder) => {
+    try {
+        await db.update(orders).set(values).where(eq(orders.id, id));
+        return { success: true, message: "Order updated successfully" };
+    } catch {
+        return { success: false, message: "Failed to update order" };
+    }
+};
+
 export const deleteOrder = async (id: string) => {
-    await db.delete(order).where(eq(order.id, id))
+    await db.delete(orders).where(eq(orders.id, id))
 
     return { success: true, message: "Order deleted" }
 }

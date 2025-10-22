@@ -37,7 +37,8 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Spinner } from "../ui/spinner";
-import { createOrder } from "@/server/order";
+import { createOrder } from "@/server/orders";
+import { authClient } from "@/lib/auth-client";
 
 const formSchema = z.object({
   orderNumber: z.string().min(1),
@@ -68,8 +69,15 @@ export default function CreateOrderForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsLoading(true);
+      const userId = (await authClient.getSession()).data?.user.id;
+
+      if (!userId) {
+        toast.error("You must be logged in to create order");
+        return;
+      }
       const response = await createOrder({
         ...values,
+        userId,
       });
       if (response.success) {
         form.reset();

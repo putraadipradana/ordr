@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { pgTable, text, timestamp, boolean, pgEnum } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
@@ -64,8 +64,9 @@ export const verification = pgTable("verification", {
 export const statusEnum = pgEnum('status', ['Done', 'In Progress', 'Not Started']);
 export const priorityEnum = pgEnum('priority', ['Low', 'Medium', 'High']);
 
-export const order = pgTable("order", {
+export const orders = pgTable("orders", {
     id: text("id").primaryKey().default(sql`gen_random_uuid()`),
+    userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
     orderNumber: text("order_number").notNull(),
     name: text("name").notNull(),
     status: statusEnum().notNull().default("Not Started"),
@@ -78,7 +79,36 @@ export const order = pgTable("order", {
         .notNull(),
 })
 
-export type Order = typeof order.$inferSelect
-export type InsertOrder = typeof order.$inferInsert
+export const orderRelations = relations(orders, ({ many, one }) => ({
+    materials: many(materials),
+    user: one(user, {
+        fields: [orders.userId],
+        references: [user.id]
+    })
+}))
 
-export const schema = { user, session, account, verification, order }
+export type Order = typeof orders.$inferSelect
+export type InsertOrder = typeof orders.$inferInsert
+
+export const materials = pgTable("materials", {
+    id: text("id").primaryKey().default(sql`gen_random_uuid()`),
+    orderId: text("order_id").notNull().references(() => orders.id, { onDelete: 'cascade' }),
+    number: text("name").notNull(),
+    status: text("status").notNull(),
+    qty: text("qty").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+        .defaultNow()
+        .$onUpdate(() => /* @__PURE__ */ new Date())
+        .notNull(),
+})
+
+export const materialRelations = relations(materials, ({ one }) => ({
+    order: one(orders, {
+        fields: [materials.orderId],
+        references: [orders.id]
+    })
+}))
+
+
+export const schema = { user, session, account, verification, orders }
