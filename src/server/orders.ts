@@ -40,8 +40,21 @@ export const getOrderById = async (id: string) => {
     try {
         const order = await db.query.orders.findFirst({
             where: eq(orders.id, id),
+            columns: {
+                id: true,
+                orderNumber: true,
+                name: true
+            },
             with: {
-                materials: true
+                materials: {
+                    columns: {
+                        id: true,
+                        number: true,
+                        name: true,
+                        qty: true,
+                        // status: true
+                    }
+                }
             }
         })
         return { success: true, order }

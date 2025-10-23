@@ -223,7 +223,7 @@ function TableAction({ item }: { item: z.infer<typeof schema> }) {
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Link href={`/orders/${item.id}`} className="absolute inset-0" />
-            Insert item
+            Details
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem

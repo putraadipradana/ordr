@@ -90,11 +90,14 @@ export const orderRelations = relations(orders, ({ many, one }) => ({
 export type Order = typeof orders.$inferSelect
 export type InsertOrder = typeof orders.$inferInsert
 
+export const materialStatusEnum = pgEnum('status', ['No Status', 'Order', 'Suplied'])
+
 export const materials = pgTable("materials", {
     id: text("id").primaryKey().default(sql`gen_random_uuid()`),
     orderId: text("order_id").notNull().references(() => orders.id, { onDelete: 'cascade' }),
-    number: text("name").notNull(),
-    status: text("status").notNull(),
+    number: text("number").notNull(),
+    name: text("name").notNull(),
+    // status: materialStatusEnum().notNull().default("Order"),
     qty: text("qty").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
