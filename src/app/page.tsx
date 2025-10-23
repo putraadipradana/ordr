@@ -1,10 +1,10 @@
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
-import { getServerSession } from "@/lib/get-session";
+import { auth } from "@/lib/auth";
 import Link from "next/link";
 
 export default async function Home() {
-  const session = await getServerSession();
+  const session = await auth.api.getSession;
   return (
     <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8 flex flex-col justify-center items-center h-screen">
       <div className="fixed top-0 py-4 sm:py-6">
