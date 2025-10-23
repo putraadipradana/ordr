@@ -49,7 +49,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between py-4 sm:gap-0 gap-2">
         <Input
           placeholder="Filter number..."
           value={(table.getColumn("number")?.getFilterValue() as string) ?? ""}
@@ -58,12 +58,10 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <div className="ml-auto">
           <Button variant={"outline"}>
             <Plus />
             Add item
           </Button>
-        </div>
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table>
