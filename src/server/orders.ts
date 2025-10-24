@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/db/drizzle";
-import { InsertOrder, orders } from "@/db/schema";
+import { InsertItem, InsertOrder, materials, orders } from "@/db/schema";
 import { eq } from "drizzle-orm"
 
 export const createOrder = async (values: InsertOrder) => {
@@ -76,4 +76,14 @@ export const deleteOrder = async (id: string) => {
     await db.delete(orders).where(eq(orders.id, id))
 
     return { success: true, message: "Order deleted" }
+}
+
+
+export const createItem = async (values: InsertItem) => {
+    try {
+        await db.insert(materials).values(values)
+        return { success: true, message: "Item created successfully" };
+    } catch {
+        return { success: false, message: "Failed to create item" };
+    }
 }

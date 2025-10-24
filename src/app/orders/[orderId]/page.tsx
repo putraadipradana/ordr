@@ -37,7 +37,11 @@ export default async function OrderPage({ params }: { params: Params }) {
               </div>
 
               {order?.materials && (
-                <DataTable columns={columns} data={order?.materials} />
+                <DataTable
+                  columns={columns}
+                  data={order?.materials}
+                  orderId={orderId}
+                />
               )}
             </div>
           </div>

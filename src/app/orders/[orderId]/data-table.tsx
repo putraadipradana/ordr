@@ -20,17 +20,18 @@ import {
 import { DataTablePagination } from "@/components/data-table-pagination";
 import React from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import CreateItemForm from "@/components/forms/create-item-form";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  orderId: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  orderId,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -49,7 +50,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between py-4 sm:gap-0 gap-2">
         <Input
           placeholder="Filter number..."
           value={(table.getColumn("number")?.getFilterValue() as string) ?? ""}
@@ -58,12 +59,7 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <div className="ml-auto">
-          <Button variant={"outline"}>
-            <Plus />
-            Add item
-          </Button>
-        </div>
+        <CreateItemForm orderId={orderId} />
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table>

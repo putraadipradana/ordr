@@ -67,7 +67,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original;
+      const item = row.original;
 
       return (
         <DropdownMenu>
@@ -79,7 +79,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(item.id)}
             >
               Copy payment ID
             </DropdownMenuItem>

@@ -13,16 +13,19 @@ export default async function Home() {
       {!session ? (
         <div className="flex items-center space-x-2">
           <Button>
-            <Link href={"/login"}>Login</Link>
+            <Link href={"/login"} className="absolute inset-0" />
+            Login
           </Button>
           <Button variant={"outline"}>
-            <Link href={"/signup"}>Sign up</Link>
+            <Link href={"/signup"} className="absolute inset-0" />
+            Sign up
           </Button>
         </div>
       ) : (
         <div>
           <Button>
-            <Link href={"/dashboard"}>Dashboard</Link>
+            <Link href={"/dashboard"} className="absolute inset-0" />
+            Dashboard
           </Button>
         </div>
       )}

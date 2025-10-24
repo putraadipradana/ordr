@@ -113,5 +113,7 @@ export const materialRelations = relations(materials, ({ one }) => ({
     })
 }))
 
+export type InsertItem = typeof materials.$inferInsert
+
 
 export const schema = { user, session, account, verification, orders }
