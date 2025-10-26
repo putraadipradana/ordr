@@ -43,7 +43,8 @@ export const getOrderById = async (id: string) => {
             columns: {
                 id: true,
                 orderNumber: true,
-                name: true
+                name: true,
+                createdAt: true,
             },
             with: {
                 materials: {

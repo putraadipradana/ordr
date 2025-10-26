@@ -107,7 +107,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
   {
     accessorKey: "priority",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
+      <DataTableColumnHeader column={column} title="Priority" />
     ),
     cell: ({ row }) => (
       <Badge variant="outline" className="py-1 [&>svg]:size-3.5">
@@ -140,7 +140,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: "Date",
+    header: "Created at",
     cell: ({ row }) => {
       const date = row.original.createdAt;
       return <span>{format(new Date(date), "dd MMMM, yyyy")}</span>;

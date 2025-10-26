@@ -66,7 +66,7 @@ export function DataTable<TData, TValue>({
           onChange={(event) =>
             table.getColumn("orderNumber")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="sm:max-w-sm w-full"
         />
         <CreateOrderForm />
       </div>
