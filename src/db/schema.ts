@@ -12,6 +12,7 @@ export const user = pgTable("user", {
         .defaultNow()
         .$onUpdate(() => /* @__PURE__ */ new Date())
         .notNull(),
+    verifiedByAdmin: boolean("verified_by_admin").default(false),
 });
 
 export const session = pgTable("session", {
@@ -62,7 +63,9 @@ export const verification = pgTable("verification", {
 });
 
 export const statusEnum = pgEnum('status', ['Done', 'In Progress', 'Not Started']);
+export const materialStatusEnum = pgEnum('material_status', ['Suplied', 'Order']);
 export const priorityEnum = pgEnum('priority', ['Low', 'Medium', 'High']);
+
 
 export const orders = pgTable("orders", {
     id: text("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -87,17 +90,17 @@ export const orderRelations = relations(orders, ({ many, one }) => ({
     })
 }))
 
+
 export type Order = typeof orders.$inferSelect
 export type InsertOrder = typeof orders.$inferInsert
 
-export const materialStatusEnum = pgEnum('status', ['No Status', 'Order', 'Suplied'])
 
 export const materials = pgTable("materials", {
     id: text("id").primaryKey().default(sql`gen_random_uuid()`),
     orderId: text("order_id").notNull().references(() => orders.id, { onDelete: 'cascade' }),
     number: text("number").notNull(),
     name: text("name").notNull(),
-    // status: materialStatusEnum().notNull().default("Order"),
+    status: materialStatusEnum().notNull().default("Order"),
     qty: text("qty").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")

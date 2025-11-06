@@ -90,8 +90,8 @@ export default function CreateItemForm({ orderId }: { orderId: string }) {
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="gap-1">
-          <DrawerTitle>Create order</DrawerTitle>
-          <DrawerDescription>Place Your Order</DrawerDescription>
+          <DrawerTitle>Add item</DrawerTitle>
+          <DrawerDescription>Add your order item</DrawerDescription>
         </DrawerHeader>
         <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
           <Separator />
@@ -130,7 +130,7 @@ export default function CreateItemForm({ orderId }: { orderId: string }) {
                     <FormControl>
                       <Input
                         className="mt-1"
-                        placeholder="Part name"
+                        placeholder="Description"
                         {...field}
                       />
                     </FormControl>
@@ -145,7 +145,7 @@ export default function CreateItemForm({ orderId }: { orderId: string }) {
                   <FormItem>
                     <FormLabel>Qty</FormLabel>
                     <FormControl>
-                      <Input className="mt-1" placeholder="123" {...field} />
+                      <Input className="mt-1" placeholder="XXX" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -1,7 +1,17 @@
 "use server"
 
+import { db } from "@/db/drizzle";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+
+export const getUsers = async () => {
+    try {
+        const users = await db.query.user.findMany()
+        return users
+    } catch {
+        console.log("Error")
+    }
+}
 
 export const signInUser = async (email: string, password: string) => {
     try {
@@ -30,7 +40,7 @@ export const signUpUser = async (email: string, password: string, name: string) 
             },
         })
 
-        return { success: true, message: "Please contact your admin for verification before login" }
+        return { success: true, message: "Please check your email for verification" }
     } catch (error) {
         const e = error as Error
         return { success: true, message: e.message || "Failed to sign up" }

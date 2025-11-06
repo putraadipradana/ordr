@@ -53,7 +53,8 @@ export const getOrderById = async (id: string) => {
                         number: true,
                         name: true,
                         qty: true,
-                        // status: true
+                        status: true,
+                        createdAt: true
                     }
                 }
             }
@@ -64,9 +65,9 @@ export const getOrderById = async (id: string) => {
     }
 }
 
-export const updateNotebook = async (id: string, values: InsertOrder) => {
+export const updateOrder = async (values: InsertOrder) => {
     try {
-        await db.update(orders).set(values).where(eq(orders.id, id));
+        await db.update(orders).set(values).where(eq(orders.id, orders.id));
         return { success: true, message: "Order updated successfully" };
     } catch {
         return { success: false, message: "Failed to update order" };

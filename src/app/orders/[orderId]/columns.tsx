@@ -3,23 +3,31 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import z from "zod";
-import { MoreHorizontal } from "lucide-react";
+import { CircleCheck, MoreHorizontal, Timer } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
+import { format } from "date-fns";
 
 export const schema = z.object({
   id: z.string(),
   number: z.string(),
   name: z.string(),
   qty: z.string(),
-  // status: z.enum(["No Status", "Order", "Suplied"]),
+  status: z.enum(["Order", "Suplied"]),
+  createdAt: z.date(),
 });
 
 export const columns: ColumnDef<z.infer<typeof schema>>[] = [
@@ -63,6 +71,23 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
   {
     accessorKey: "status",
     header: "Status",
+    cell: ({ row }) => {
+      return (
+        <Badge variant="outline" className="py-1 [&>svg]:size-3.5">
+          {row.original.status === "Suplied" ? <CircleCheck /> : <Timer />}
+          <span className="capitalize">{row.original.status}</span>
+        </Badge>
+      );
+    },
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Created at",
+    cell: ({ row }) => {
+      return (
+        <span>{format(new Date(row.original.createdAt), "dd MMMM, yyyy")}</span>
+      );
+    },
   },
   {
     id: "actions",
@@ -81,11 +106,26 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(item.id)}
             >
-              Copy payment ID
+              Copy part number
             </DropdownMenuItem>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>Status</DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuRadioGroup>
+                  <DropdownMenuRadioItem value="personal">
+                    Order
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="work">
+                    Suplied
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="other">
+                    Not Order
+                  </DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

@@ -11,9 +11,13 @@ export async function proxy(request: NextRequest) {
         return NextResponse.redirect(new URL("/login", request.url));
     }
 
+    if (session.user.verifiedByAdmin == false) {
+        return NextResponse.redirect(new URL("/login", request.url));
+    }
+
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ["/dashboard:path*"], // Specify the routes the middleware applies to
+    matcher: ["/dashboard:path*", "/orders:path*", "/customers:path*", "/users:path*"], // Specify the routes the middleware applies to
 };

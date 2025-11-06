@@ -6,37 +6,15 @@ import {
   ArrowUp,
   Circle,
   CircleCheck,
-  MoreHorizontal,
   Timer,
 } from "lucide-react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { Checkbox } from "@/components/ui/checkbox";
 import z from "zod";
-import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { deleteOrder } from "@/server/orders";
 import { DataTableColumnHeader } from "@/components/data-table-column-header";
-import Link from "next/link";
 import { format } from "date-fns";
+import { TableActions } from "./_components/table-actions";
 
 export const schema = z.object({
   id: z.string(),
@@ -157,83 +135,7 @@ export const columns: ColumnDef<z.infer<typeof schema>>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      return <TableAction item={row.original} />;
+      return <TableActions item={row.original} />;
     },
   },
 ];
-
-function TableAction({ item }: { item: z.infer<typeof schema> }) {
-  const router = useRouter();
-  const [deleteDialog, setDeleteDialog] = useState(false);
-
-  const handleDelete = async () => {
-    try {
-      const response = await deleteOrder(item.id);
-
-      if (response.success) {
-        toast.success("Order deleted successfully");
-        router.refresh();
-        setDeleteDialog(false);
-      }
-    } catch {
-      toast.error("Failed to delete order");
-    }
-  };
-
-  const copyOrderNumber = async () => {
-    try {
-      navigator.clipboard.writeText(item.orderNumber);
-    } catch {
-      toast.error("Failed to copy order number");
-    } finally {
-      toast.success("Copied");
-    }
-  };
-
-  return (
-    <>
-      <AlertDialog open={deleteDialog} onOpenChange={setDeleteDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              order from our servers.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>
-              Continue
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <DropdownMenu modal={false}>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem onSelect={copyOrderNumber}>
-            Copy order number
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Link href={`/orders/${item.id}`} className="absolute inset-0" />
-            Details
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            variant="destructive"
-            onSelect={() => setDeleteDialog(true)}
-          >
-            Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </>
-  );
-}

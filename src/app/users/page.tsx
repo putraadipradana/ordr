@@ -1,5 +1,5 @@
 import AppLayout from "@/components/app-layout";
-import { getCustomers } from "@/server/customer";
+import { getUsers } from "@/server/users";
 import { BreadcrumbItem } from "@/types/index";
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -9,8 +9,8 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 export default async function Page() {
-  const team = await getCustomers();
-  console.log(team);
+  const users = await getUsers();
+  console.log(users);
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <div className="flex flex-1 flex-col">

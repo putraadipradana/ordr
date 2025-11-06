@@ -12,8 +12,8 @@ export const auth = betterAuth({
     emailVerification: {
         sendVerificationEmail: async ({ user, url }) => {
             await resend.emails.send({
-                from: 'Acme <onboarding@resend.dev>',
-                to: "putraadi.pradana29@gmail.com",
+                from: 'Ordr <onboarding@resend.dev>',
+                to: user.email,
                 subject: 'Verify your email address',
                 react: UserVerificationEmail({ userName: user.name, userEmail: user.email, verificationUrl: url }),
             });
@@ -23,6 +23,15 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
         requireEmailVerification: true
+    },
+    user: {
+        additionalFields: {
+            verifiedByAdmin: {
+                type: "boolean",
+                input: false,
+                defaultValue: false
+            }
+        }
     },
     database: drizzleAdapter(db, {
         provider: "pg",
